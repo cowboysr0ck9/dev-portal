@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 
 // Load User Mongoose Data Model
 import { User } from '../models/User';
+import { Hash } from "crypto";
 
 const router = express.Router();
 
@@ -38,9 +39,18 @@ User.findOne({email: req.body.email})
                avatar
              });
 
-             let t = newUser.password;
            bcrypt.genSalt(10, (err: Error, salt: string) => {
-
+              bcrypt.hash(newUser.password, salt, (err: Error, hash: string) =>{
+              if(err) throw err;
+              newUser.password = hash;
+              newUser.save()
+                .then(user => {
+                  res.json(user)
+                })
+                .catch(err => {
+                  console.log(err)
+                })
+              })
            })
           }
   })
