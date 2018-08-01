@@ -2,7 +2,7 @@
 import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import { IUser } from "../../interface/user.interface";
-interface IUserModel extends IUser, mongoose.Document { }
+interface IUserModel extends IUser, mongoose.Document { };
 
 
 // Creates User Data Model Schema
