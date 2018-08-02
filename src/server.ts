@@ -15,7 +15,7 @@ import posts from './routes/api/posts';
 const app: express.Application = express();
 
 // bodyParser Middleware
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // MLab Development URI with Username & Password Credentials
@@ -23,16 +23,16 @@ const db = DEV_ENV.MONGO_URI;
 
 // Mongoose ODM Library
 mongoose
-  .connect(
-    db,
-    { useNewUrlParser: true }
-  )
-  .then(() => console.log("MongoDB Connected"))
-  .catch((err: string) => console.log(err));
+    .connect(
+        db,
+        { useNewUrlParser: true }
+    )
+    .then(() => console.log('MongoDB Connected'))
+    .catch((err: string) => console.log(err));
 
 // 1st API Route
 app.get('/', (req, res) => {
-  res.send('Hello Developer, Tyler')
+    res.send('Hello Developer, Tyler');
 });
 
 // Force Router To Use These Routes
@@ -45,6 +45,6 @@ app.use('/api/posts', posts);
 const port: any = process.env.PORT || 3000;
 
 app.listen(port, () => {
-  // Success callback
-  console.log(`Listening at http://localhost:${port}/`);
+    // Success callback
+    console.log(`Listening at http://localhost:${port}/`);
 });

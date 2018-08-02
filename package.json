@@ -33,6 +33,7 @@
     "@types/mongodb": "^3.1.2",
     "@types/mongoose": "^5.2.3",
     "nodemon": "^1.18.3",
+    "prettier": "1.14.0",
     "ts-node": "^7.0.0"
   }
 }
