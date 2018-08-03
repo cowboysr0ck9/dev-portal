@@ -1,16 +1,16 @@
 import express from 'express';
 import { Request, Response } from 'express';
+const router = express.Router();
 import gravatar from 'gravatar';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 // Development Keys
 import DEV_ENV from '../../../config/config';
+import passport from 'passport';
 
 // Load User Mongoose Data Model
 import { User } from '../models/User';
-
-const router = express.Router();
 
 // @Route GET api/users/test
 // @Desc Test users route
@@ -112,5 +112,21 @@ router.post('/login', (req: Request, res: Response) => {
         });
     });
 });
+
+// @Route GET api/users/current
+// @Desc Return Current User
+// @Access Private
+router.get(
+    '/current',
+    passport.authenticate('jwt', { session: false }),
+    (req: Request, res: Response) => {
+        res.json({
+            id: req.user.id,
+            name: req.user.name,
+            username: req.user.username,
+            email: req.user.email,
+        });
+    }
+);
 
 export default router;

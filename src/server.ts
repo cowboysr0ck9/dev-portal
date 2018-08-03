@@ -2,6 +2,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import passport from 'passport';
 
 // Import Global Config Settings
 import DEV_ENV from '../config/config';
@@ -30,10 +31,12 @@ mongoose
     .then(() => console.log('MongoDB Connected'))
     .catch((err: string) => console.log(err));
 
-// 1st API Route
-app.get('/', (req, res) => {
-    res.send('Hello Developer, Tyler');
-});
+// Passport
+app.use(passport.initialize());
+
+// Attach Local Instance of Passport Strategy to type "passport"
+import MyPassportService from '../config/passport';
+MyPassportService(passport);
 
 // Force Router To Use These Routes
 app.use('/api/users', users);
