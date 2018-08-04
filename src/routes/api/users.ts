@@ -9,6 +9,9 @@ import jwt from 'jsonwebtoken';
 import DEV_ENV from '../../../config/config';
 import passport from 'passport';
 
+// Load Input Validation
+import validateRegisterInput from '../../validation/register';
+
 // Load User Mongoose Data Model
 import { User } from '../models/User';
 
@@ -23,9 +26,18 @@ router.get('/test', (req: Request, res: Response) =>
 // @Desc Register user
 // @Access Public
 router.post('/register', (req: Request, res: Response) => {
+    // Runs Validation Prior To Hitting the Route
+    const { errors, isValid } = validateRegisterInput(req.body);
+
+    // Checks Validation
+    if (!isValid) {
+        return res.status(404).json(errors);
+    }
+
     User.findOne({ email: req.body.email }).then((user: any) => {
         if (user) {
-            return res.status(400).json({ email: 'Email already exists' });
+            errors.email = 'Email address already exists.';
+            return res.status(400).json({ errors });
         } else {
             // Gravatar https://github.com/emerleite/node-gravatar
             const avatar = gravatar.url(req.body.email, {

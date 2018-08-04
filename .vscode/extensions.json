@@ -1,0 +1,17 @@
+{
+  "recommendations": [
+    "dustinsanders.an-old-hope-theme-vscode",
+    "formulahendry.auto-close-tag",
+    "msjsdiag.debugger-for-chrome",
+    "EditorConfig.editorconfig",
+    "Zignd.html-css-class-completion",
+    "eg2.vscode-npm-script",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    "eg2.tslint",
+    "robinbentley.sass-indented",
+    "HookyQR.beautify",
+    "PKief.material-icon-theme",
+    "coenraads.bracket - pair - colorizer"
+  ]
+}
