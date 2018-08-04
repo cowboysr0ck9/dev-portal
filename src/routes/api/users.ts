@@ -11,6 +11,7 @@ import passport from 'passport';
 
 // Load Input Validation
 import validateRegisterInput from '../../validation/register';
+import validateLoginInput from '../../validation/login';
 
 // Load User Mongoose Data Model
 import { User } from '../models/User';
@@ -54,7 +55,8 @@ router.post('/register', (req: Request, res: Response) => {
                 avatar,
             });
 
-            bcrypt.genSalt(12, (err: Error, salt: string) => {
+            // Change Number of Rouds Based on Modern Best Practices
+            bcrypt.genSalt(16, (err: Error, salt: string) => {
                 bcrypt.hash(
                     newUser.password,
                     salt,
@@ -80,6 +82,14 @@ router.post('/register', (req: Request, res: Response) => {
 // @Desc Login User & Return JWT
 // @Access Public
 router.post('/login', (req: Request, res: Response) => {
+    // Runs Validation Prior To Hitting the Route
+    const { errors, isValid } = validateLoginInput(req.body);
+
+    // Checks Validation
+    if (!isValid) {
+        return res.status(404).json(errors);
+    }
+
     const email = req.body.email;
     const password = req.body.password;
 
@@ -87,7 +97,8 @@ router.post('/login', (req: Request, res: Response) => {
     User.findOne({ email }).then((user) => {
         // Check For User
         if (!user) {
-            res.status(404).json({ email: 'User not found' });
+            errors.email = 'User not found';
+            res.status(404).json({ errors });
         }
 
         // Check Password
@@ -119,7 +130,8 @@ router.post('/login', (req: Request, res: Response) => {
                     }
                 );
             } else {
-                return res.status(400).json({ password: 'Password Incorrect' });
+                errors.password = 'Password is incorrect';
+                return res.status(400).json({ errors });
             }
         });
     });
