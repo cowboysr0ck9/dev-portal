@@ -1,6 +1,7 @@
 // Imports Mongoose
-import mongoose, { Schema } from 'mongoose';
+import mongoose from 'mongoose';
 import { IProfile } from '../../interface/profile-interface';
+import { Schema } from 'mongoose';
 interface IProfileModel extends IProfile, mongoose.Document {}
 
 // Creates Profile Data Model Schema
@@ -124,4 +125,5 @@ const profileSchema = new mongoose.Schema({
     },
 });
 
-export const Profile = mongoose.model<IProfileModel>('Profile', profileSchema);
+const Profile = mongoose.model<IProfileModel>('Profile', profileSchema);
+export default Profile;

@@ -4,35 +4,24 @@ const router = express.Router();
 import gravatar from 'gravatar';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-
-// Development Keys
 import DEV_ENV from '../../../config/config';
 import passport from 'passport';
+
+// Load User Mongoose Data Model
+import User from '../models/User';
 
 // Load Input Validation
 import validateRegisterInput from '../../validation/register';
 import validateLoginInput from '../../validation/login';
 
-// Load User Mongoose Data Model
-import { User } from '../models/User';
-
-// @Route GET api/users/test
-// @Desc Test users route
-// @Access Public
-router.get('/test', (req: Request, res: Response) =>
-    res.json({ msg: 'User works' })
-);
-
 // @Route POST api/users/register
 // @Desc Register user
 // @Access Public
 router.post('/register', (req: Request, res: Response) => {
-    // Runs Validation Prior To Hitting the Route
     const { errors, isValid } = validateRegisterInput(req.body);
 
-    // Checks Validation
     if (!isValid) {
-        return res.status(404).json(errors);
+        return res.status(400).json(errors);
     }
 
     User.findOne({ email: req.body.email }).then((user: any) => {

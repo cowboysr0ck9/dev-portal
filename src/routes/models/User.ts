@@ -45,4 +45,5 @@ const userSchema = new mongoose.Schema(
 // Applies Custom Unique Validator to Users
 userSchema.plugin(uniqueValidator, { message: 'is already taken.' });
 
-export const User = mongoose.model<IUserModel>('User', userSchema);
+const User = mongoose.model<IUserModel>('User', userSchema);
+export default User;
