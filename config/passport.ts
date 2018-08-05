@@ -1,7 +1,7 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
 import mongoose from 'mongoose';
 // Import User Model from Mongooser
-import { User } from '../src/routes/models/User';
+import User from '../src/routes/models/User';
 import DEV_ENV from './config';
 
 // Defines Passport JWT Strategy
