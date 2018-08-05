@@ -1,5 +1,7 @@
 // Import Core Server Libraries
 import express from 'express';
+import helmet from 'helmet';
+import compression from 'compression';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import passport from 'passport';
@@ -14,6 +16,22 @@ import posts from './routes/api/posts';
 
 // Create Express.JS Instance
 const app: express.Application = express();
+
+// Uses Helmet.js to set HTTP Headers
+// Adds extra layer of security to API
+app.use(helmet());
+app.use(
+    helmet.contentSecurityPolicy({
+        directives: {
+            defaultSrc: ["'self'"],
+        },
+    })
+);
+app.use(helmet.noCache());
+app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
+
+// Enables gZip Compression on all routes
+app.use(compression());
 
 // bodyParser Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
