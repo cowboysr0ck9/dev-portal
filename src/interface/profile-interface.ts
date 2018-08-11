@@ -12,6 +12,7 @@ export interface IProfile {
     github: string;
     experience: [
         {
+            id: any;
             title: string;
             company: string;
             location: string;
@@ -23,6 +24,7 @@ export interface IProfile {
     ];
     education: [
         {
+            id: any;
             school: string;
             degree: string;
             studied: string;
