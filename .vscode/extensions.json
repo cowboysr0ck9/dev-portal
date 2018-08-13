@@ -6,6 +6,7 @@
         "pkief.material-icon-theme",
         "christian-kohler.path-intellisense",
         "esbenp.prettier-vscode",
-        "eg2.tslint" 
+        "eg2.tslint" ,
+        "coenraads.bracket-pair-colorizer"
     ]
 }
