@@ -1,4 +1,4 @@
-# ReactJS Dashboard
+# DevPortal ReactJS
 
 ### Installation
 
@@ -7,7 +7,7 @@ EadsGraphic requires [Node.js](https://nodejs.org/) v8+ to run.
 Install all node dependencies.
 
 ```sh
-$ cd fev-portal
+$ cd dev-portal
 $ yarn
 $ yarn start
 ```
