@@ -63,7 +63,7 @@ app.use('/api/posts', posts);
 
 // Serve the application at the given port
 // The port the express app will listen on
-const port: any = process.env.PORT || 3000;
+const port: any = process.env.PORT || 5000;
 
 app.listen(port, () => {
     // Success callback
