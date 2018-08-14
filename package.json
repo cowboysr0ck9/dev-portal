@@ -7,7 +7,10 @@
   "license": "MIT",
   "scripts": {
     "start": "ts-node src/server.ts",
-    "dev": "./node_modules/nodemon/bin/nodemon.js"
+    "dev": "./node_modules/nodemon/bin/nodemon.js",
+    "client-install": "cd client && yarn",
+    "client": "cd client && yarn start",
+    "dev-mode": "concurrently \"yarn dev\" \"yarn client\""
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.1",
@@ -22,6 +25,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
+    "concurrently": "^3.6.1",
     "express": "^4.16.3",
     "gravatar": "^1.6.0",
     "helmet": "^3.13.0",

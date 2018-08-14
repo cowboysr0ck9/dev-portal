@@ -58,6 +58,7 @@
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive"
   },
+  "proxy": "http://localhost:5000",
   "devDependencies": {
     "@types/jest": "^23.3.1",
     "@types/node": "^10.5.8",
