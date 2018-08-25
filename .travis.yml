@@ -7,6 +7,6 @@ cache:
     - node_modules
 script:
   - cd client && yarn
-  - cd client && yarn build
+  - yarn build
 on:
   branch: master
