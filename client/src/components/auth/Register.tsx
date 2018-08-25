@@ -1,11 +1,14 @@
 import * as React from 'react';
-import { Form, Row, Col, FormGroup, Input, Label, FormText } from 'reactstrap';
+import { Form, Row, Col, FormGroup, Input, Label, Button } from 'reactstrap';
+import axios from 'axios';
+
 interface IRegisterProps {
     // Empty Props For Now
 }
 
 interface IRegisterState {
     name: string;
+    username: string;
     email: string;
     password: string;
     confirmPassword: string;
@@ -17,6 +20,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
         super(props);
         this.state = {
             name: '',
+            username: '',
             email: '',
             password: '',
             confirmPassword: '',
@@ -24,6 +28,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
         };
 
         this.onNameChange = this.onNameChange.bind(this);
+        this.onUserNameChange = this.onUserNameChange.bind(this);
         this.onEmailChange = this.onEmailChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
         this.onConfirmPasswordChange = this.onConfirmPasswordChange.bind(this);
@@ -36,6 +41,10 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     // --------------------
     onNameChange(e: any) {
         this.setState({ name: e.target.value });
+    }
+
+    onUserNameChange(e: any) {
+        this.setState({ username: e.target.value });
     }
 
     onEmailChange(e: any) {
@@ -60,11 +69,21 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
 
         const newUser = {
             name: this.state.name,
+            username: this.state.username,
             email: this.state.email,
             password: this.state.password,
-            confirmPassword: this.state.confirmPassword,
+            password2: this.state.confirmPassword,
         };
-        console.log(newUser);
+
+        // Makes a POST Request to Register New User
+        axios
+            .post('api/users/register', newUser)
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log(err.res.data);
+            });
     }
 
     render() {
@@ -89,6 +108,18 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                         </FormGroup>
 
                         <FormGroup>
+                            <Label for="username">Username</Label>
+                            <Input
+                                type="text"
+                                placeholder="Username"
+                                name="username"
+                                id="username"
+                                value={this.state.username}
+                                onChange={this.onUserNameChange}
+                            />
+                        </FormGroup>
+
+                        <FormGroup>
                             <Label for="email">Email</Label>
                             <Input
                                 type="email"
@@ -98,10 +129,6 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                                 value={this.state.email}
                                 onChange={this.onEmailChange}
                             />
-                            <FormText color="muted">
-                                Please use a Gravatar associated email if
-                                applicable.
-                            </FormText>
                         </FormGroup>
 
                         <FormGroup>
@@ -130,10 +157,9 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                             />
                         </FormGroup>
 
-                        <Input
-                            type="submit"
-                            className="btn btn-info btn-block mt-4"
-                        />
+                        <Button type="submit" className="btn btn-info">
+                            Submit
+                        </Button>
                     </Form>
                 </Col>
             </Row>
