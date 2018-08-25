@@ -1,6 +1,8 @@
 import * as React from 'react';
 import '../assets/scss/main.scss';
 
+import { Container } from 'reactstrap';
+
 // Component Imports
 import Navbar from '../components/layout/Navbar';
 import Landing from '../components/layout/Landing';
@@ -19,14 +21,14 @@ class MainView extends React.Component {
                 <div className="App">
                     <Navbar />
                     <Route exact={true} path="/" component={Landing} />
-                    <div className="container">
+                    <Container fluid={true}>
                         <Route
                             exact={true}
                             path="/register"
                             component={Register}
                         />
                         <Route exact={true} path="/login" component={Login} />
-                    </div>
+                    </Container>
                     <Footer />
                 </div>
             </Router>
