@@ -6,8 +6,8 @@ cache:
   directories:
     - node_modules
 script:
-  - yarn test
-  - yarn build
+  - cd client && yarn test
+  - cd client && yarn build
 deploy:
   provider: surge
   skip_cleanup: true
