@@ -12,6 +12,7 @@ interface IData {
 
 const validateRegisterInput = (data: IData) => {
     interface IErrors {
+        username?: string;
         name?: string;
         email?: string;
         password?: string;
@@ -20,6 +21,7 @@ const validateRegisterInput = (data: IData) => {
 
     const errors: IErrors = {};
 
+    data.username = !isEmpty(data.username) ? data.username : '';
     data.name = !isEmpty(data.name) ? data.name : '';
     data.email = !isEmpty(data.email) ? data.email : '';
     data.password = !isEmpty(data.password) ? data.password : '';
@@ -29,15 +31,22 @@ const validateRegisterInput = (data: IData) => {
         errors.name = 'Name must be between 2 and 30 characters';
     }
     // check empty
+    if (Validator.isEmpty(data.username)) {
+        errors.username = 'Please provide a username.';
+    }
+
     if (Validator.isEmpty(data.name)) {
         errors.name = 'Please provide your name.';
     }
+
     if (Validator.isEmpty(data.email)) {
         errors.email = 'Please fill in an email address.';
     }
+
     if (Validator.isEmpty(data.password)) {
         errors.password = 'Please provide a password.';
     }
+
     if (Validator.isEmpty(data.password2)) {
         errors.password2 = 'Please confirm your password.';
     }

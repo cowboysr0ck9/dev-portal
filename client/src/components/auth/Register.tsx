@@ -1,6 +1,16 @@
 import * as React from 'react';
-import { Form, Row, Col, FormGroup, Input, Label, Button } from 'reactstrap';
+import {
+    Form,
+    Row,
+    Col,
+    FormGroup,
+    Input,
+    Label,
+    Button,
+    FormFeedback,
+} from 'reactstrap';
 import axios from 'axios';
+import classnames from 'classnames';
 
 interface IRegisterProps {
     // Empty Props For Now
@@ -12,7 +22,13 @@ interface IRegisterState {
     email: string;
     password: string;
     confirmPassword: string;
-    errors: Object;
+    errors: {
+        username?: string;
+        name?: string;
+        email?: string;
+        password?: string;
+        password2?: string;
+    };
 }
 
 class Register extends React.Component<IRegisterProps, IRegisterState> {
@@ -75,18 +91,22 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
             password2: this.state.confirmPassword,
         };
 
-        // Makes a POST Request to Register New User
+        // -------------------------------------
+        // POST request to 'api/users/register'
+        // -------------------------------------
         axios
             .post('api/users/register', newUser)
             .then((res) => {
                 console.log(res.data);
             })
             .catch((err) => {
-                console.log(err.res.data);
+                this.setState({ errors: err.response.data });
             });
     }
 
     render() {
+        // Captures this.state errors for Bootstrap 4 Form Validation
+        const errors = this.state.errors;
         return (
             <Row>
                 <Col className="col-sm-6 m-auto">
@@ -98,6 +118,9 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                         <FormGroup>
                             <Label for="name">Name</Label>
                             <Input
+                                className={classnames('form-control-lg', {
+                                    'is-invalid': errors.name,
+                                })}
                                 type="text"
                                 placeholder="Name"
                                 name="name"
@@ -105,11 +128,17 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                                 value={this.state.name}
                                 onChange={this.onNameChange}
                             />
+                            {errors.name && (
+                                <FormFeedback>{errors.name}</FormFeedback>
+                            )}
                         </FormGroup>
 
                         <FormGroup>
                             <Label for="username">Username</Label>
                             <Input
+                                className={classnames('form-control-lg', {
+                                    'is-invalid': errors.username,
+                                })}
                                 type="text"
                                 placeholder="Username"
                                 name="username"
@@ -117,11 +146,17 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                                 value={this.state.username}
                                 onChange={this.onUserNameChange}
                             />
+                            {errors.username && (
+                                <FormFeedback>{errors.username}</FormFeedback>
+                            )}
                         </FormGroup>
 
                         <FormGroup>
                             <Label for="email">Email</Label>
                             <Input
+                                className={classnames('form-control-lg', {
+                                    'is-invalid': errors.email,
+                                })}
                                 type="email"
                                 placeholder="Email Address"
                                 name="email"
@@ -129,11 +164,17 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                                 value={this.state.email}
                                 onChange={this.onEmailChange}
                             />
+                            {errors.email && (
+                                <FormFeedback>{errors.email}</FormFeedback>
+                            )}
                         </FormGroup>
 
                         <FormGroup>
                             <Label for="password">Password</Label>
                             <Input
+                                className={classnames('form-control-lg', {
+                                    'is-invalid': errors.password,
+                                })}
                                 type="password"
                                 placeholder="Password"
                                 name="password"
@@ -141,6 +182,9 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                                 value={this.state.password}
                                 onChange={this.onPasswordChange}
                             />
+                            {errors.password && (
+                                <FormFeedback>{errors.password}</FormFeedback>
+                            )}
                         </FormGroup>
 
                         <FormGroup>
@@ -148,6 +192,9 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                                 Confirm Password
                             </Label>
                             <Input
+                                className={classnames('form-control-lg', {
+                                    'is-invalid': errors.password2,
+                                })}
                                 type="password"
                                 placeholder="Confirm Password"
                                 name="confirmPassword"
@@ -155,6 +202,9 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
                                 value={this.state.confirmPassword}
                                 onChange={this.onConfirmPasswordChange}
                             />
+                            {errors.password2 && (
+                                <FormFeedback>{errors.password2}</FormFeedback>
+                            )}
                         </FormGroup>
 
                         <Button type="submit" className="btn btn-info">
