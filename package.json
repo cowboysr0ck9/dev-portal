@@ -13,15 +13,6 @@
     "dev-mode": "concurrently \"yarn dev\" \"yarn client\""
   },
   "dependencies": {
-    "@types/bcryptjs": "^2.4.1",
-    "@types/compression": "^0.0.36",
-    "@types/express": "^4.16.0",
-    "@types/gravatar": "^1.4.28",
-    "@types/helmet": "^0.0.38",
-    "@types/jsonwebtoken": "^7.2.8",
-    "@types/mongoose-unique-validator": "^1.0.1",
-    "@types/passport-jwt": "^3.0.1",
-    "@types/validator": "^9.4.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
@@ -39,6 +30,15 @@
     "validator": "^10.4.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.1",
+    "@types/compression": "^0.0.36",
+    "@types/express": "^4.16.0",
+    "@types/gravatar": "^1.4.28",
+    "@types/helmet": "^0.0.38",
+    "@types/jsonwebtoken": "^7.2.8",
+    "@types/mongoose-unique-validator": "^1.0.1",
+    "@types/passport-jwt": "^3.0.1",
+    "@types/validator": "^9.4.1",
     "@types/mongodb": "^3.1.2",
     "@types/mongoose": "^5.2.3",
     "nodemon": "^1.18.3",
