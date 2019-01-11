@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactPasswordStrength from 'react-password-strength';
 import {
     Container,
     Row,
@@ -22,10 +21,23 @@ class Register extends Component {
             errors: {},
         };
         this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
     }
 
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
+    }
+
+    onSubmit(e) {
+        const { name, email, password, password2 } = this.state;
+        e.preventDefault();
+        const newUser = {
+            name,
+            email,
+            password,
+            password2,
+        };
+        console.log(newUser);
     }
 
     render() {
@@ -39,11 +51,10 @@ class Register extends Component {
                         <p className="lead text-center">
                             Create your new account
                         </p>
-                        <Form>
+                        <Form onSubmit={this.onSubmit}>
                             <FormGroup>
                                 <Input
                                     type="text"
-                                    size="lg"
                                     placeholder="Name"
                                     name="name"
                                     value={name}
@@ -52,7 +63,6 @@ class Register extends Component {
                             </FormGroup>
                             <FormGroup>
                                 <Input
-                                    size="lg"
                                     type="email"
                                     placeholder="Email Address"
                                     name="email"
@@ -63,7 +73,6 @@ class Register extends Component {
                             <FormGroup>
                                 <Input
                                     type="password"
-                                    size="lg"
                                     placeholder="Password"
                                     name="password"
                                     value={password}
@@ -71,33 +80,8 @@ class Register extends Component {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <ReactPasswordStrength
-                                   
-                                    style={{ display: 'block' }}
-                                    minLength={8}
-                                    minScore={3}
-                                    scoreWords={[
-                                        'weak',
-                                        'okay',
-                                        'good',
-                                        'strong',
-                                        'stronger',
-                                    ]}
-                                    changeCallback={(e) => console.log(e)}
-                                    inputProps={{
-                                        name: 'password',
-                                        autoComplete: 'off',
-                                        className: 'form-control-lg',
-                                        placeholder: 'Password'
-                                    }}
-                                >
-
-                                </ReactPasswordStrength>
-                            </FormGroup>
-                            <FormGroup>
                                 <Input
                                     type="password"
-                                    size="lg"
                                     placeholder="Confirm Password"
                                     name="password2"
                                     value={password2}
@@ -105,7 +89,6 @@ class Register extends Component {
                                 />
                             </FormGroup>
                             <Button
-                                size="lg"
                                 type="submit"
                                 color="primary"
                                 className="btn-block mt-4"
