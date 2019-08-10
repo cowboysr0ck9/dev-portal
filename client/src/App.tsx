@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/navbar';
 import Landing from './components/layout/landing';
 
@@ -10,7 +10,7 @@ import './App.css';
 
 const App = () => {
     return (
-        <BrowserRouter>
+        <Router>
             <Fragment>
                 <Navbar />
                 <Route exact path="/" component={Landing} />
@@ -21,7 +21,7 @@ const App = () => {
                     </Switch>
                 </section>
             </Fragment>
-        </BrowserRouter>
+        </Router>
     );
 };
 

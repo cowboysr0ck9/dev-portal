@@ -55,6 +55,7 @@ const Register = () => {
                         value={email}
                         onChange={(e: React.SyntheticEvent) => onChange(e)}
                         name="email"
+                        required
                     />
                     <small className="form-text">
                         This site uses Gravatar so if you want a profile image,
@@ -69,6 +70,7 @@ const Register = () => {
                         onChange={(e: React.SyntheticEvent) => onChange(e)}
                         name="password"
                         minLength={6}
+                        required
                     />
                 </div>
                 <div className="form-group">
@@ -79,6 +81,7 @@ const Register = () => {
                         onChange={(e: React.SyntheticEvent) => onChange(e)}
                         name="password2"
                         minLength={6}
+                        required
                     />
                 </div>
                 <input
