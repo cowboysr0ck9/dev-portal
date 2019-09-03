@@ -1,27 +1,36 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Navbar from './components/layout/navbar';
 import Landing from './components/layout/landing';
-
 import Register from './components/auth/register';
 import Login from './components/auth/login';
+import Alert from './components/alert/Alert';
+
+// Redux Store
+import { Provider } from 'react-redux';
+import { store } from './state/store';
 
 import './App.css';
 
 const App = () => {
     return (
-        <Router>
-            <Fragment>
+        <Provider store={store}>
+            <Router>
                 <Navbar />
-                <Route exact path="/" component={Landing} />
-                <section className="container">
+                <Alert />
+                <main>
                     <Switch>
-                        <Route exact path="/register" component={Register} />
-                        <Route exact path="/login" component={Login} />
+                        {/* TODO: Convert Below To Map Function */}
+                        <Route path="/" exact component={Landing} />
+                        <Route path="/register" exact component={Register} />
+                        <Route path="/login" exact component={Login} />
+
+                        {/* Handles Unfound Routes */}
+                        <Route path="/" render={() => <h1>Add a 404 Page Here</h1>} />
                     </Switch>
-                </section>
-            </Fragment>
-        </Router>
+                </main>
+            </Router>
+        </Provider>
     );
 };
 

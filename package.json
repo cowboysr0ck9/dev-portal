@@ -13,6 +13,8 @@
     "dev-mode": "concurrently \"yarn dev\" \"yarn client\""
   },
   "dependencies": {
+    "@types/react-redux": "^7.1.2",
+    "@types/uuid": "^3.4.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
@@ -27,7 +29,9 @@
     "mongoose-unique-validator": "^2.0.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
+    "react-redux": "^7.1.1",
     "typescript": "^2.9.2",
+    "uuid": "^3.3.3",
     "validator": "^10.4.0"
   },
   "devDependencies": {
