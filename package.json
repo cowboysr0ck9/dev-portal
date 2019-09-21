@@ -10,8 +10,9 @@
     "dev": "./node_modules/nodemon/bin/nodemon.js",
     "client-install": "cd client && yarn",
     "client": "cd client && yarn start",
-    "dev-mode": "concurrently \"yarn dev\" \"yarn client\""
-  },
+    "dev-mode": "concurrently \"yarn dev\" \"yarn client\"",
+    "heroku-post-build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    },
   "dependencies": {
     "@types/react-redux": "^7.1.2",
     "@types/uuid": "^3.4.5",

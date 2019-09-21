@@ -26,7 +26,7 @@ const App = () => {
                         <Route path="/login" exact component={Login} />
 
                         {/* Handles Unfound Routes */}
-                        <Route path="/" render={() => <h1>Add a 404 Page Here</h1>} />
+                        <Route render={() => <h1>Add a 404 Page Here</h1>} />
                     </Switch>
                 </main>
             </Router>

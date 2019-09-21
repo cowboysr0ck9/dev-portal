@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import passport from 'passport';
 
+import path from 'path';
 // Import Global Config Settings
 import DEV_ENV from '../config/config';
 
@@ -60,6 +61,14 @@ MyPassportService(passport);
 app.use('/api/users', users);
 app.use('/api/profile', profile);
 app.use('/api/posts', posts);
+
+if (process.env.NODE_ENV === 'production') {
+    // Set The Static Folder
+    app.use(express.static('client/build'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
 
 // Serve the application at the given port
 // The port the express app will listen on
