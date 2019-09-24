@@ -11,7 +11,7 @@
     "client-install": "cd client && yarn",
     "client": "cd client && yarn start",
     "dev-mode": "concurrently \"yarn dev\" \"yarn client\"",
-    "build": "rm -rf ./build/ && tsc && cd client && yarn build",
+    "build": "rm -rf ./build/ && tsc && cd client && npm install && npm run build",
     "start": "NODE_ENV=production node build/src/server.js"
     },
   "dependencies": {
@@ -51,5 +51,8 @@
     "nodemon": "^1.18.3",
     "prettier": "1.14.0",
     "ts-node": "^7.0.0"
+  },
+  "engines": {
+    "node": "10.16.2"
   }
 }
