@@ -11,7 +11,7 @@
     "client-install": "cd client && yarn",
     "client": "cd client && yarn start",
     "dev-mode": "concurrently \"yarn dev\" \"yarn client\"",
-    "build": "rm -rf ./build/ && tsc",
+    "build": "rm -rf ./build/ && tsc && cd client && yarn build",
     "start": "NODE_ENV=production node build/src/server.js"
     },
   "dependencies": {
