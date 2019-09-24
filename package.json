@@ -12,7 +12,7 @@
     "client": "cd client && yarn start",
     "dev-mode": "concurrently \"yarn dev\" \"yarn client\"",
     "build": "rm -rf ./build/ && tsc && cd client && npm install && npm run build",
-    "start": "NODE_ENV=production pm2 start build/src/server.js"
+    "start": "NODE_ENV=production pm2 build/src/server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
