@@ -11,7 +11,6 @@
     "client-install": "cd client && yarn",
     "client": "cd client && yarn start",
     "dev-mode": "concurrently \"yarn dev\" \"yarn client\"",
-    "heroku-post-build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
     "build": "rm -rf ./build/ && tsc",
     "start": "NODE_ENV=production node build/src/server.js"
     },
