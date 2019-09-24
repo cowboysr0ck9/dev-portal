@@ -6,16 +6,16 @@
   "author": "Tyler Eads <tyler.eads9@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/server.ts",
+    "start-dev": "ts-node src/server.ts",
     "dev": "./node_modules/nodemon/bin/nodemon.js",
     "client-install": "cd client && yarn",
     "client": "cd client && yarn start",
     "dev-mode": "concurrently \"yarn dev\" \"yarn client\"",
-    "heroku-post-build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+    "heroku-post-build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "build": "rm -rf ./build/ && tsc",
+    "start": "NODE_ENV=production node build/src/server.js"
     },
   "dependencies": {
-    "@types/react-redux": "^7.1.2",
-    "@types/uuid": "^3.4.5",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
@@ -36,6 +36,8 @@
     "validator": "^10.4.0"
   },
   "devDependencies": {
+    "@types/react-redux": "^7.1.2",
+    "@types/uuid": "^3.4.5",
     "@types/bcryptjs": "^2.4.1",
     "@types/compression": "^0.0.36",
     "@types/express": "^4.16.0",

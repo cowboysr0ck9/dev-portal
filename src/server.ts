@@ -21,15 +21,15 @@ const app: express.Application = express();
 // Uses Helmet.js to set HTTP Headers
 // Adds extra layer of security to API
 app.use(helmet());
-app.use(
-    helmet.contentSecurityPolicy({
-        directives: {
-            defaultSrc: ["'self'"],
-        },
-    })
-);
+// app.use(
+//     helmet.contentSecurityPolicy({
+//         directives: {
+//             defaultSrc: ["'self'"],
+//         },
+//     })
+// );
 app.use(helmet.noCache());
-app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
+// app.use(helmet.referrerPolicy({ policy: 'same-origin' }));
 
 // Enables gZip Compression on all routes
 app.use(compression());
@@ -64,9 +64,9 @@ app.use('/api/posts', posts);
 
 if (process.env.NODE_ENV === 'production') {
     // Set The Static Folder
-    app.use(express.static('client/build'));
+    app.use(express.static('./client/build'));
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+        res.sendFile('index.html');
     });
 }
 
@@ -75,6 +75,5 @@ if (process.env.NODE_ENV === 'production') {
 const port: any = process.env.PORT || 5000;
 
 app.listen(port, () => {
-    // Success callback
     console.log(`Listening at http://localhost:${port}/`);
 });
