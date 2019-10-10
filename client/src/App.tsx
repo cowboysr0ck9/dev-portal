@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Navbar from './components/layout/navbar';
-import Landing from './components/layout/landing';
-import Register from './components/auth/register';
-import Login from './components/auth/login';
+import Navbar from './components/layout/Navbar';
+import Landing from './components/layout/Landing';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
 import Alert from './components/alert/Alert';
 
 // Redux Store
@@ -11,6 +11,9 @@ import { Provider } from 'react-redux';
 import { store } from './state/store';
 
 import './App.css';
+
+// TODO: Look into React Error Boundary
+// To Protect App from Uncaught Errors & Edge Cases
 
 const App = () => {
     return (
@@ -26,7 +29,7 @@ const App = () => {
                         <Route path="/login" exact component={Login} />
 
                         {/* Handles Unfound Routes */}
-                        <Route render={() => <h1>Add a 404 Page Here</h1>} />
+                        <Route render={() => <h1>Add a 404 Page Component Here</h1>} />
                     </Switch>
                 </main>
             </Router>
