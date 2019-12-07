@@ -1,33 +1,24 @@
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import mongoose from 'mongoose';
-// Import User Model from Mongooser
 import User from '../src/routes/models/User';
-import DEV_ENV from './config';
-
-// Defines Passport JWT Strategy
-const jwtStrategy = Strategy;
-const extractJwt = ExtractJwt;
-
-// Passport Options
-const opts = {
-    jwtFromRequest: extractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: DEV_ENV.SECRET,
-};
+import { PassportStatic } from 'passport';
 
 // Exports Instance of Passport
-export default (passport: any) => {
+export const PassportService = (passport: PassportStatic) => {
     passport.use(
-        new jwtStrategy(opts, (jwt_payload, done) => {
-            User.findById(jwt_payload.id)
-                .then((user) => {
-                    if (user) {
-                        return done(null, user);
-                    }
-                    return done(null, false);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        })
+        new Strategy(
+            {
+                jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+                secretOrKey: String(process.env.SECRET),
+            },
+            async (jwt_payload, done) => {
+                try {
+                    const { _id } = jwt_payload._doc;
+                    const user = await User.findById(_id);
+                    return user ? done(null, user) : done(null, false);
+                } catch (err) {
+                    console.log('Unauthorized');
+                }
+            }
+        )
     );
 };
