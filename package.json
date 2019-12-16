@@ -28,7 +28,7 @@
     "jsonwebtoken": "^8.3.0",
     "jspdf": "^1.5.3",
     "livereload": "^0.7.0",
-    "mongoose": "^5.2.5",
+    "mongoose": "^5.7.5",
     "mongoose-unique-validator": "^2.0.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
