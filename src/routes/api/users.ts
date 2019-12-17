@@ -1,10 +1,8 @@
-import express from 'express';
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 const router = express.Router();
 import gravatar from 'gravatar';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import DEV_ENV from '../../../config/config';
 import passport from 'passport';
 
 // Load User Mongoose Data Model
@@ -76,7 +74,7 @@ router.post('/login', async (req: Request, res: Response) => {
             errors.email = 'User not found';
             res.status(404).json({ errors });
         }
-
+        req.user = { ...user };
         // Check Password
         // In Future turn on strictNullCheck and see why typescript calls user.password null
         bcrypt.compare(password, user.password).then((isMatch) => {
@@ -107,7 +105,7 @@ router.post('/login', async (req: Request, res: Response) => {
 // @Access Private
 router.get('/current', passport.authenticate('jwt', { session: false }), (req: Request, res: Response) => {
     res.json({
-        ...req.user._doc,
+        ...req.user,
     });
 });
 

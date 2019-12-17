@@ -2,7 +2,15 @@
 import mongoose from 'mongoose';
 import { Schema } from 'mongoose';
 
-// Create Posts Schema
+interface IBrandModel extends mongoose.Document {
+    user: string;
+    name: string;
+    primary: string;
+    secondary: string;
+    alternate: string;
+    logo: string;
+}
+
 const brandSchema = new Schema(
     {
         user: {
@@ -34,5 +42,5 @@ const brandSchema = new Schema(
 );
 
 // Exports Schema For Use In Routes
-const Brand = mongoose.model('Brand', brandSchema);
+const Brand = mongoose.model<IBrandModel>('Brand', brandSchema);
 export default Brand;

@@ -10,6 +10,10 @@ import path from 'path';
 
 import { PassportService } from '../config/passport';
 
+// Swagger Documentation
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUI from 'swagger-ui-express';
+
 // Router Links
 import users from './routes/api/users';
 import profile from './routes/api/profile';
@@ -20,6 +24,32 @@ dotenv.config();
 
 // Create Express.JS Instance
 const app: express.Application = express();
+
+// Swagger Documentation
+const swaggerDefinition = {
+    info: {
+        title: 'DevPortal Swagger Documentation',
+        version: '1.0.0',
+        description: 'Official RESTful API documentation for DevPortal.',
+    },
+    host: `localhost:${process.env.PORT}`,
+    basePath: '/',
+    securityDefinitions: {
+        bearerAuth: {
+            type: 'apiKey',
+            name: 'Authorization',
+            scheme: 'bearer',
+            in: 'header',
+        },
+    },
+};
+
+const options = {
+    swaggerDefinition,
+    apis: ['./routes/api/*.ts'],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
 
 app.use(helmet());
 app.use(helmet.noCache());
@@ -51,6 +81,16 @@ if (process.env.NODE_ENV === 'production') {
     app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, '../../client/build/index.html'));
     });
+}
+
+// Hides Swagger Documentation in Production
+if (process.env.NODE_ENV !== 'production') {
+    app.get('/swagger.json', async (req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.send(swaggerSpec);
+    });
+
+    app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
 }
 
 app.listen(process.env.PORT, () => {

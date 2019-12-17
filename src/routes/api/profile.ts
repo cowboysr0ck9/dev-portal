@@ -1,9 +1,6 @@
 import express from 'express';
 import { Request, Response } from 'express';
-const router = express.Router();
-import mongoose from 'mongoose';
 import passport from 'passport';
-// import DEV_ENV from '../../../config/config';
 
 // Imports Profile & User Data Models
 import Profile from '../models/Profile';
@@ -13,29 +10,32 @@ import User from '../models/User';
 import validateProfileInput from '../../validation/profile';
 import validateExperienceInput from '../../validation/experience';
 import validateEducationInput from '../../validation/education';
-import { IProfile } from '../../interface/profile-interface';
+
+const router = express.Router();
+
+// Utility Funtion
+const getPassport = (req: Request) => {
+    const test: any = { ...req.user };
+    const userProfile = Object.assign({}, { ...test._doc });
+    const { _id, email, name, username } = userProfile;
+    return { _id, email, name, username };
+};
 
 // @Route GET api/profile
 // @Desc Gets user's profile
 // @Access Private route
 router.get('/', passport.authenticate('jwt', { session: false }), async (req: Request, res: Response) => {
-    // Initializes Errors Response Object
-    let errors = {
-        noProfile: '',
-    };
+    console.log(getPassport(req));
+    try {
+        const profile = await Profile.findOne({ user: getPassport(req)._id }).populate('user', ['name', 'avatar']);
+        profile ? profile : () => res.status(404).json({ msg: 'Sorry, no profiles were found in our system.' });
 
-    Profile.findOne({ user: req.user.id })
-        .populate('user', ['name', 'avatar'])
-        .then((profile) => {
-            if (!profile) {
-                errors.noProfile = 'Sorry, no profile was found.';
-                return res.status(404).json(errors);
-            }
-            res.json(profile);
-        })
-        .catch((err) => {
-            res.status(404).json(err);
-        });
+        res.status(200).json(profile);
+    } catch (err) {
+        console.error(err);
+        // TODO: Logger Service
+        res.status(404).json({ msg: 'Something went wrong getting profiles' });
+    }
 });
 
 // @Route GET api/profile/handle/:handle
@@ -46,6 +46,7 @@ router.get('/handle/:handle', async (req: Request, res: Response) => {
     const errors = {
         noProfile: '',
     };
+
     Profile.findOne({ handle: req.params.handle })
         .populate('user', ['name', 'avatra'])
         .then((profile) => {
@@ -66,7 +67,8 @@ router.get('/user/:user_id', async (req: Request, res: Response) => {
     const errors = {
         noProfile: '',
     };
-    Profile.findOne({ user: req.params.user_id })
+
+    Profile.findOne({ user: getPassport(req)._id })
         .populate('user', ['name', 'avatra'])
         .then((profile) => {
             if (!profile) {
@@ -98,6 +100,8 @@ router.get('/all', async (req: Request, res: Response) => {
                 res.json(profiles);
             });
     } catch (err) {
+        console.error(err);
+        // TODO: Logger Service
         res.status(404).json({ profile: 'No profiles have been found.' });
     }
 });
@@ -134,7 +138,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req: R
             behance: '',
         },
     };
-    profileFields.user = req.user.id;
+    profileFields.user = getPassport(req)._id;
 
     if (req.body.handle) profileFields.handle = req.body.handle;
     if (req.body.company) profileFields.company = req.body.company;
@@ -160,26 +164,20 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req: R
     if (req.body.github) profileFields.handle = req.body.handle;
 
     // find user profile
-    Profile.findOne({ user: req.user.id })
+    Profile.findOne({ user: getPassport(req)._id })
         .then((profile) => {
             if (profile) {
                 // Update
                 console.log(profileFields);
-                Profile.findOneAndUpdate({ user: req.user.id }, { $set: profileFields }, { new: true })
+                Profile.findOneAndUpdate({ user: getPassport(req)._id }, { $set: profileFields }, { new: true })
                     .then((profile) => res.json(profile))
-                    .catch((error) =>
-                        res.status(400).json({
-                            msg: 'Profile error occured, please try again.',
-                        })
-                    );
+                    .catch((error) => res.status(400).json({ msg: 'Profile error occured, please try again.' }));
             } else {
                 // Creates Profile
                 // First checks to see if profile exists
                 Profile.findOne({ handle: profileFields.handle }).then((profile) => {
                     if (profile) {
-                        res.status(400).json({
-                            msg: 'Sorry, this profile handles already exists.',
-                        });
+                        res.status(400).json({ msg: 'Sorry, this profile handles already exists.' });
                     }
                 });
                 // Saves New User Profile
@@ -188,14 +186,12 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req: R
                     .then((profile) => {
                         res.json(profile);
                     })
-                    .catch((error) =>
-                        res.status(400).json({
-                            msg: 'An error occured while saving the profile.',
-                        })
-                    );
+                    .catch((error) => res.status(400).json({ msg: 'An error occured while saving the profile.' }));
             }
         })
         .catch((err) => {
+            console.error(err);
+            // TODO: Logger Service
             res.status(404).json(err);
         });
 });
@@ -211,7 +207,7 @@ router.post('/experience', passport.authenticate('jwt', { session: false }), asy
         return res.status(400).json(errors);
     }
 
-    Profile.findOne({ user: req.user.id })
+    Profile.findOne({ user: getPassport(req)._id })
         .populate('user', ['name', 'avatar'])
         .then((profile) => {
             if (!profile) {
@@ -235,9 +231,7 @@ router.post('/experience', passport.authenticate('jwt', { session: false }), asy
                 .save()
                 .then((profile) => res.json(profile))
                 .catch((err) => {
-                    res.status(404).json({
-                        experience: 'Sorry your experience encountered an error.',
-                    });
+                    res.status(404).json({ experience: 'Sorry your experience encountered an error.' });
                 });
         });
 });
@@ -253,7 +247,7 @@ router.post('/education', passport.authenticate('jwt', { session: false }), asyn
         return res.status(400).json(errors);
     }
 
-    Profile.findOne({ user: req.user.id })
+    Profile.findOne({ user: getPassport(req)._id })
         .populate('user', ['name', 'avatar'])
         .then((profile) => {
             if (!profile) {
@@ -277,9 +271,9 @@ router.post('/education', passport.authenticate('jwt', { session: false }), asyn
                 .save()
                 .then((profile) => res.json(profile))
                 .catch((err) => {
-                    res.status(404).json({
-                        education: 'Sorry there was an error with your education.',
-                    });
+                    console.error(err);
+                    // TODO: Logger Service
+                    res.status(404).json({ education: 'Sorry there was an error with your education.' });
                 });
         });
 });
@@ -288,7 +282,7 @@ router.post('/education', passport.authenticate('jwt', { session: false }), asyn
 // @Desc Delete Experience from profile
 // @Access Private Route
 router.delete('/experience/:exp_id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    Profile.findOne({ user: req.user.id })
+    Profile.findOne({ user: getPassport(req)._id })
         .then((profile) => {
             // Get remove index
             const removeIndex = profile.experience.map((item) => item.id).indexOf(req.params.exp_id);
@@ -300,6 +294,9 @@ router.delete('/experience/:exp_id', passport.authenticate('jwt', { session: fal
             profile.save().then((profile) => res.json(profile));
         })
         .catch((err) => {
+            console.error(err);
+            // TODO: Logger Service
+
             res.status(404).json(err);
         });
 });
@@ -309,7 +306,7 @@ router.delete('/experience/:exp_id', passport.authenticate('jwt', { session: fal
 // @Access Private Route
 router.delete('/education/:edu_id', passport.authenticate('jwt', { session: false }), async (req, res) => {
     try {
-        const profile = await Profile.findOne({ user: req.user.id });
+        const profile = await Profile.findOne({ user: getPassport(req)._id });
         const index = profile.education.map((item: any) => item.id).indexOf(req.params.edu_id);
 
         profile.education.splice(index, 1);
@@ -317,6 +314,8 @@ router.delete('/education/:edu_id', passport.authenticate('jwt', { session: fals
 
         res.status(200).json(save);
     } catch (err) {
+        console.error(err);
+        // TODO: Logger Service
         res.status(404).json(err);
     }
 });
@@ -324,14 +323,17 @@ router.delete('/education/:edu_id', passport.authenticate('jwt', { session: fals
 // @Route DELETE api/profile
 // @Desc Delete User and Profile
 // @Access Private Route
-router.delete('/:_id', passport.authenticate('jwt', { session: false }), async (req, res) => {
-    const { _id } = req.params;
-    try {
-        await Profile.findOneAndRemove({ _id });
-        await User.findOneAndRemove({ _id });
+router.delete('/:id', passport.authenticate('jwt', { session: false }), async (req, res) => {
+    const { id } = req.params;
 
-        res.status(200).json({ message: 'Profile successfully deleted.' });
+    try {
+        await Profile.findOneAndRemove({ id });
+        await User.findOneAndRemove({ id });
+
+        res.status(200).json({ message: `Profile ${id} successfully deleted.` });
     } catch (err) {
+        console.error(err);
+        // TODO: Logger Service
         res.status(404).json(err);
     }
 });

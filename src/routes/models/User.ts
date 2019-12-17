@@ -1,10 +1,14 @@
 // Imports Mongoose
 import mongoose from 'mongoose';
-import uniqueValidator from 'mongoose-unique-validator';
-import { IUser } from '../../interface/user-interface';
-interface IUserModel extends IUser, mongoose.Document {}
 
-// Creates User Data Model Schema
+export interface IUserModel extends mongoose.Document {
+    name: string;
+    username: string;
+    email: string;
+    password: string;
+    avatar: string;
+}
+
 const userSchema = new mongoose.Schema(
     {
         name: {
@@ -37,9 +41,6 @@ const userSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
-
-// Applies Custom Unique Validator to Users
-userSchema.plugin(uniqueValidator, { message: 'is already taken.' });
 
 const User = mongoose.model<IUserModel>('User', userSchema);
 export default User;

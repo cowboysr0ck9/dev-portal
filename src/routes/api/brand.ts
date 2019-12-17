@@ -10,7 +10,7 @@ const router = express.Router();
 // @Route Get api/brands
 router.get('/', passport.authenticate('jwt', { session: false }), async (req: Request, res: Response) => {
     try {
-        const brands = await Brand.find();
+        const brands = await Brand.find().limit(10);
         res.status(200).json(brands);
     } catch {
         res.status(404).json({ message: 'No Brands were found.' });
@@ -35,6 +35,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req: R
     try {
         const brand = new Brand({ ...req.body });
         await brand.save();
+
         return res.status(201).json(brand);
     } catch {
         return res.status(404).json({ message: 'Unable to create Brand.' });

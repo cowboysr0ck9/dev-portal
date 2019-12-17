@@ -14,9 +14,10 @@ export const PassportService = (passport: PassportStatic) => {
                 try {
                     const { _id } = jwt_payload._doc;
                     const user = await User.findById(_id);
+
                     return user ? done(null, user) : done(null, false);
                 } catch (err) {
-                    console.log('Unauthorized');
+                    console.log({ msg: 'Unauthorized Access' });
                 }
             }
         )
