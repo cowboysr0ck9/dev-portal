@@ -12,9 +12,6 @@ import { store } from './state/store';
 
 import './App.css';
 
-// TODO: Look into React Error Boundary
-// To Protect App from Uncaught Errors & Edge Cases
-
 const App = () => {
     return (
         <Provider store={store}>
