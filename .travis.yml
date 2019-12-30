@@ -2,7 +2,11 @@ language: node_js
 node_js:
   - "stable"
 cache:
+  yarn: true
   directories:
-  - node_modules
+    - node_modules
 script:
-  - npm run build
+  - cd client && yarn
+  - yarn build
+on:
+  branch: master
