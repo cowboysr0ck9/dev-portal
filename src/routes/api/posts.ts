@@ -22,9 +22,9 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req: R
     try {
         const post = new Post({ ...req.body });
         await post.save();
-        return res.status(201).json(post);
+        return res.status(200).json({ post });
     } catch (err) {
-        return res.status(404).json(err);
+        return res.status(400).json({ err });
     }
 });
 
@@ -36,7 +36,7 @@ router.get('/', async (req: Request, res: Response) => {
         const post = await Post.find().sort({ date: -1 });
         return res.status(200).json(post);
     } catch (error) {
-        return res.status(404).json({ msg: 'Sorry no posts were found.' });
+        return res.status(400).json({ message: 'Sorry no posts were found.' });
     }
 });
 

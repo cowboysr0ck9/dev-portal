@@ -13,6 +13,9 @@ import validateEducationInput from '../../validation/education';
 
 const router = express.Router();
 
+// Imorts Status Messages
+import { PROFILE_FAILURE_MSG, PROFILE_NOT_FOUND_MSG, PROFILE_SUCCESS_MSG } from './messages';
+
 // Utility Funtion
 const getPassport = (req: Request) => {
     const test: any = { ...req.user };
@@ -28,13 +31,11 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req: Re
     console.log(getPassport(req));
     try {
         const profile = await Profile.findOne({ user: getPassport(req)._id }).populate('user', ['name', 'avatar']);
-        profile ? profile : () => res.status(404).json({ msg: 'Sorry, no profiles were found in our system.' });
+        profile ? profile : () => res.status(404).json({ message: PROFILE_NOT_FOUND_MSG });
 
-        res.status(200).json(profile);
+        return res.status(200).json({ profile });
     } catch (err) {
-        console.error(err);
-        // TODO: Logger Service
-        res.status(404).json({ msg: 'Something went wrong getting profiles' });
+        return res.status(400).json({ message: PROFILE_FAILURE_MSG });
     }
 });
 
@@ -52,11 +53,11 @@ router.get('/handle/:handle', async (req: Request, res: Response) => {
         .then((profile) => {
             if (!profile) {
                 errors.noProfile = 'No profile has been found for this user.';
-                res.status(404).json(errors);
+                res.status(400).json({ errors });
             }
             res.json(profile);
         })
-        .catch((err) => res.status(404).json({ profile: 'No profile has been found for this user.' }));
+        .catch((err) => res.status(400).json({ message: PROFILE_NOT_FOUND_MSG }));
 });
 
 // @Route GET api/profile/user/:user_id
@@ -72,12 +73,12 @@ router.get('/user/:user_id', async (req: Request, res: Response) => {
         .populate('user', ['name', 'avatra'])
         .then((profile) => {
             if (!profile) {
-                errors.noProfile = 'No profile has been found for this user.';
+                errors.noProfile = PROFILE_NOT_FOUND_MSG;
                 res.status(404).json(errors);
             }
             res.json(profile);
         })
-        .catch((err) => res.status(404).json({ profile: 'No profile has been found for this user.' }));
+        .catch((err) => res.status(400).json({ message: PROFILE_NOT_FOUND_MSG }));
 });
 
 // @Route GET api/profile/all
@@ -94,15 +95,13 @@ router.get('/all', async (req: Request, res: Response) => {
             .populate('user', ['name', 'avatar'])
             .then((profiles) => {
                 if (!profiles) {
-                    errors.noProfiles = 'No profiles have been found.';
-                    return res.status(404).json(errors);
+                    errors.noProfiles = PROFILE_NOT_FOUND_MSG;
+                    return res.status(400).json(errors);
                 }
-                res.json(profiles);
+                res.status(200).json({ profiles });
             });
-    } catch (err) {
-        console.error(err);
-        // TODO: Logger Service
-        res.status(404).json({ profile: 'No profiles have been found.' });
+    } catch (error) {
+        return res.status(400).json({ message: PROFILE_NOT_FOUND_MSG });
     }
 });
 
@@ -192,7 +191,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req: R
         .catch((err) => {
             console.error(err);
             // TODO: Logger Service
-            res.status(404).json(err);
+            res.status(400).json({ err });
         });
 });
 

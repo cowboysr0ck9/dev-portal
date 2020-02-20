@@ -8,6 +8,16 @@ import xlsx from 'xlsx';
 // Imports Models
 import Brand from '../models/Brand';
 
+// Messages
+
+import {
+    BRAND_FAILURE_MSG,
+    BRAND_SUCCESS_MSG,
+    BRAND_NOT_FOUND_MSG,
+    PDF_FAILURE_MSG,
+    CSV_FAILURE_MSG,
+} from './messages';
+
 const router = express.Router();
 
 // @Route Get api/brands
@@ -16,7 +26,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), async (req: Re
         const brands = await Brand.find().limit(10);
         res.status(200).json(brands);
     } catch {
-        res.status(404).json({ message: 'No Brands were found.' });
+        res.status(400).json({ message: BRAND_NOT_FOUND_MSG });
     }
 });
 
@@ -29,7 +39,7 @@ router.put('/:_id', passport.authenticate('jwt', { session: false }), async (req
 
         return res.status(201).json(brand);
     } catch {
-        return res.status(404).json({ message: 'Unable to create Brand.' });
+        return res.status(400).json({ message: BRAND_FAILURE_MSG });
     }
 });
 
@@ -41,7 +51,7 @@ router.post('/', passport.authenticate('jwt', { session: false }), async (req: R
 
         return res.status(201).json(brand);
     } catch {
-        return res.status(404).json({ message: 'Unable to create Brand.' });
+        return res.status(400).json({ message: BRAND_FAILURE_MSG });
     }
 });
 
@@ -59,11 +69,11 @@ router.get('/pdf', async (req: Request, res: Response) => {
         pdf.pipe(res);
         pdf.end();
     } catch {
-        return res.status(404).json({ message: 'Unable to create PDF.' });
+        return res.status(400).json({ message: PDF_FAILURE_MSG });
     }
 });
 
-// @Route GET api/brands/pdf
+// @Route GET api/brands/csv
 router.get('/csv', async (req: Request, res: Response) => {
     try {
         const data = [['id', 'name', 'debits', 'credits']];
@@ -75,7 +85,7 @@ router.get('/csv', async (req: Request, res: Response) => {
 
         res.status(200).send(buffer);
     } catch {
-        return res.status(404).json({ message: 'Unable to create PDF.' });
+        return res.status(400).json({ message: CSV_FAILURE_MSG });
     }
 });
 
