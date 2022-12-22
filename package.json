@@ -23,7 +23,7 @@
     "express": "^4.16.3",
     "gravatar": "^1.6.0",
     "helmet": "^3.13.0",
-    "jsonwebtoken": "^8.3.0",
+    "jsonwebtoken": "^9.0.0",
     "jspdf": "^1.5.3",
     "livereload": "^0.7.0",
     "mongoose": "^5.2.5",
